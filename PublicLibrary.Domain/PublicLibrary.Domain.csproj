@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Author.cs" />
+    <Compile Include="AuthorRepository.cs" />
     <Compile Include="Body.cs" />
     <Compile Include="Book.cs" />
     <Compile Include="BookRepository.cs" />
@@ -48,6 +49,7 @@
     <Compile Include="MyORM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="User.cs" />
+    <Compile Include="UserRepository.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
