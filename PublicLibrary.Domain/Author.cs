@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace PublicLibrary.Domain
 {
-    //test
     public class Author : Body
     {
         public DateTime? DeathDate { get; set; }
