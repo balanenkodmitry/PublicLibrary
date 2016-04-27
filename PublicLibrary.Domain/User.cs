@@ -18,7 +18,7 @@ namespace PublicLibrary.Domain
             this.FirstName = FirstName;
             this.LastName = LastName;
             this.Sex = Sex;
-            this.BornDate = BornDate;
+            this.BornDate =  BornDate;  
             this.EMail = EMail;
             this.Age = DateTime.Now.AddYears(BornDate.Year * -1).Year;
             this.Password = Password;
