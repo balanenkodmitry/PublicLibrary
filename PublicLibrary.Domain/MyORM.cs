@@ -804,6 +804,8 @@ namespace PublicLibrary.Domain
                 Adaptor.UpdateCommand.Parameters.Add("@WhosTaken_ID", SqlDbType.Int);
                 Adaptor.UpdateCommand.Parameters["@WhosTaken_ID"].Value = null;
 
+
+
                 Adaptor.UpdateCommand.ExecuteNonQuery();
 
                 Conn.Close();
