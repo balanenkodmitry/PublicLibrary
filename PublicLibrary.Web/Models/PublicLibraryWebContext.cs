@@ -22,5 +22,7 @@ namespace PublicLibrary.Web.Models
         public System.Data.Entity.DbSet<PublicLibrary.Domain.Book> Books { get; set; }
 
         public System.Data.Entity.DbSet<PublicLibrary.Domain.Author> Authors { get; set; }
+
+        public System.Data.Entity.DbSet<PublicLibrary.Domain.User> Users { get; set; }
     }
 }

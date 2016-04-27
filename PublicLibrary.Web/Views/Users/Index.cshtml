@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PublicLibrary.Domain.Author>
+﻿@model IEnumerable<PublicLibrary.Domain.User>
 
 @{
     ViewBag.Title = "Index";
@@ -12,7 +12,10 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.DeathDate)
+            @Html.DisplayNameFor(model => model.Password)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EMail)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Age)
@@ -35,7 +38,10 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.DeathDate)
+            @Html.DisplayFor(modelItem => item.Password)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EMail)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Age)

@@ -11,107 +11,107 @@ using PublicLibrary.Web.Models;
 
 namespace PublicLibrary.Web.Controllers
 {
-    public class AuthorsController : Controller
+    public class UsersController : Controller
     {
         private PublicLibraryWebContext db = new PublicLibraryWebContext();
 
-        // GET: Authors
+        // GET: Users
         public ActionResult Index()
         {
-            return View(db.Authors.ToList());
+            return View(db.Users.ToList());
         }
 
-        // GET: Authors/Details/5
+        // GET: Users/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Author author = db.Authors.Find(id);
-            if (author == null)
+            User user = db.Users.Find(id);
+            if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(author);
+            return View(user);
         }
 
-        // GET: Authors/Create
+        // GET: Users/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Authors/Create
+        // POST: Users/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,DeathDate,Age,Sex,FirstName,LastName,BornDate")] Author author)
+        public ActionResult Create([Bind(Include = "ID,Password,EMail,Age,Sex,FirstName,LastName,BornDate")] User user)
         {
             if (ModelState.IsValid)
             {
-                db.Authors.Add(author);
+                db.Users.Add(user);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(author);
+            return View(user);
         }
 
-        // GET: Authors/Edit/5
+        // GET: Users/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Author author = db.Authors.Find(id);
-            if (author == null)
+            User user = db.Users.Find(id);
+            if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(author);
+            return View(user);
         }
 
-        // POST: Authors/Edit/5
+        // POST: Users/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,DeathDate,Age,Sex,FirstName,LastName,BornDate")] Author author)
+        public ActionResult Edit([Bind(Include = "ID,Password,EMail,Age,Sex,FirstName,LastName,BornDate")] User user)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(author).State = EntityState.Modified;
+                db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(author);
+            return View(user);
         }
 
-        // GET: Authors/Delete/5
+        // GET: Users/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Author author = db.Authors.Find(id);
-            if (author == null)
+            User user = db.Users.Find(id);
+            if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(author);
+            return View(user);
         }
 
-        // POST: Authors/Delete/5
+        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Author author = db.Authors.Find(id);
-            db.Authors.Remove(author);
+            User user = db.Users.Find(id);
+            db.Users.Remove(user);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
