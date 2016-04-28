@@ -5,15 +5,14 @@ namespace PublicLibrary.Web.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<PublicLibrary.Web.Models.PublicLibraryWebContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<PublicLibrary.Web.Models.ApplicationDbContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            ContextKey = "PublicLibrary.Web.Models.PublicLibraryWebContext";
         }
 
-        protected override void Seed(PublicLibrary.Web.Models.PublicLibraryWebContext context)
+        protected override void Seed(PublicLibrary.Web.Models.ApplicationDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 

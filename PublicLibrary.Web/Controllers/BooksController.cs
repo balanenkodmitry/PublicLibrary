@@ -15,6 +15,7 @@ namespace PublicLibrary.Web.Controllers
     public class BooksController : Controller
     {
         private PublicLibraryWebContext db = new PublicLibraryWebContext();
+        private BookRepository db1 = new BookRepository();
 
         // GET: Books
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
@@ -33,7 +34,7 @@ namespace PublicLibrary.Web.Controllers
             ViewBag.CurrentFilter = searchString;
 
 
-            var books = db.Books.Select(b=>b);
+            var books = db1.GetBooks();//db.Books.Select(b=>b);
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -69,7 +70,7 @@ namespace PublicLibrary.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Book book = db.Books.Find(id);
+            Book book = db1.GetBook(id.GetValueOrDefault());//db.Books.Find(id);
             if (book == null)
             {
                 return HttpNotFound();
@@ -92,8 +93,10 @@ namespace PublicLibrary.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Books.Add(book);
-                db.SaveChanges();
+                db1.AddBook(book);
+
+                //db.Books.Add(book);
+                //db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -107,7 +110,7 @@ namespace PublicLibrary.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Book book = db.Books.Find(id);
+            Book book = db1.GetBook(id.GetValueOrDefault());//db.Books.Find(id);
             if (book == null)
             {
                 return HttpNotFound();
@@ -120,12 +123,14 @@ namespace PublicLibrary.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,BookAvailability")] Book book)
+        public ActionResult Edit([Bind(Include = "ID,Name,BookAvailability,WhosTakenUser")] Book book)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(book).State = EntityState.Modified;
-                db.SaveChanges();
+
+                db1.EditBook(book);
+                //db.Entry(book).State = EntityState.Modified;
+                //db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(book);
@@ -139,6 +144,7 @@ namespace PublicLibrary.Web.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Book book = db.Books.Find(id);
+            
             if (book == null)
             {
                 return HttpNotFound();
@@ -151,9 +157,12 @@ namespace PublicLibrary.Web.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Book book = db.Books.Find(id);
-            db.Books.Remove(book);
-            db.SaveChanges();
+            //Book book = db.Books.Find(id);
+            //db.Books.Remove(book);
+            //db.SaveChanges();
+
+            db1.DeleteBook(id);
+
             return RedirectToAction("Index");
         }
 

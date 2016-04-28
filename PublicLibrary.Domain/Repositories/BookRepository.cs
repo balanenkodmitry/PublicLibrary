@@ -97,6 +97,40 @@ namespace PublicLibrary.Domain
             return null;
         }
 
+        public IEnumerable<Book> GetBooks()
+        {
+            using (SqlConnection Conn = new SqlConnection(GetConnectionString()))
+            {
+                SqlDataAdapter Adaptor = new SqlDataAdapter();
+
+                DataSet ds = new DataSet();
+
+                string CommandText = "select * from dbo.Books";
+
+                Adaptor.SelectCommand = new SqlCommand(CommandText, Conn);        
+
+                Adaptor.Fill(ds);
+
+                var empList = ds.Tables[0].AsEnumerable()
+                    .Select(dataRow => new Book
+                    {
+                        Name = dataRow.Field<string>("Name"),
+                        BookAvailability = (Book.Availability)dataRow.Field<int>("Available"),
+                        ID = dataRow.Field<int>("ID")
+                    })
+                    .ToList();
+
+                if (empList.Count > 0)
+                {
+                    return empList;
+                }
+
+                Conn.Close();
+            }
+
+            return null;
+        }
+
         public List<Author> GetBookAuthors(int Book_ID)
         {
             using (SqlConnection Conn = new SqlConnection(GetConnectionString()))
@@ -337,6 +371,52 @@ namespace PublicLibrary.Domain
             }
         }
 
+        public void AddBook(Book Book)
+        {
+            bool Exist = false;
+
+            try
+            {
+                Exist = IfExistBook(Book);
+            }
+            catch (DataBaseAlreadyHasElementException<Book> e)
+            {
+                Exist = true;
+            }
+
+            if (Exist)
+            {
+                return;
+            }
+
+            using (SqlConnection Conn = new SqlConnection(GetConnectionString()))
+            {
+                Conn.Open();
+
+                SqlDataAdapter Adaptor = new SqlDataAdapter();
+
+                string CommandText = "INSERT INTO dbo.Books (Name, Available) VALUES (@Name, @Available)";
+
+                Adaptor.InsertCommand = new SqlCommand(CommandText, Conn);
+                Adaptor.InsertCommand.CommandType = CommandType.Text;
+
+                Adaptor.InsertCommand.Parameters.Clear();
+
+                Adaptor.InsertCommand.Parameters.Add("@Name", SqlDbType.NVarChar);
+                Adaptor.InsertCommand.Parameters.Add("@Available", SqlDbType.Int);
+
+                Adaptor.InsertCommand.Parameters["@Name"].Value = Book.Name;
+                Adaptor.InsertCommand.Parameters["@Available"].Value = Book.BookAvailability;
+
+                Adaptor.InsertCommand.ExecuteNonQuery();
+
+                Book.ID = GetBook(Book.Name).ID;
+
+                Conn.Close();
+            }
+                                    
+        }
+
         public void AddBook(Book Book, List<Author> Autors)
         {
             bool Exist = false;
@@ -423,6 +503,64 @@ namespace PublicLibrary.Domain
 
             return false;
         }
+
+        public void EditBook(Book book)
+        {
+            using (SqlConnection Conn = new SqlConnection(GetConnectionString()))
+            {
+                Conn.Open();
+
+                SqlDataAdapter Adaptor = new SqlDataAdapter();
+
+                string CommandText = " UPDATE dbo.Books SET Name = @Name, Available = @Available, WhosTaken_ID = @WhosTaken_ID WHERE ID = @ID";
+
+                Adaptor.UpdateCommand = new SqlCommand(CommandText, Conn);
+                Adaptor.UpdateCommand.CommandType = CommandType.Text;
+
+                Adaptor.UpdateCommand.Parameters.Clear();
+
+                Adaptor.UpdateCommand.Parameters.Add("@Name", SqlDbType.NVarChar);
+                Adaptor.UpdateCommand.Parameters["@Name"].Value = book.Name;
+
+                Adaptor.UpdateCommand.Parameters.Add("@Available", SqlDbType.Int);                
+                Adaptor.UpdateCommand.Parameters["@Available"].Value = book.BookAvailability;
+
+                Adaptor.UpdateCommand.Parameters.Add("@WhosTaken_ID", SqlDbType.Int);
+                Adaptor.UpdateCommand.Parameters["@WhosTaken_ID"].Value = book.WhosTakenUser;
+
+                Adaptor.UpdateCommand.Parameters.Add("@ID", SqlDbType.Int);
+                Adaptor.UpdateCommand.Parameters["@ID"].Value = book.ID;
+
+                Adaptor.UpdateCommand.ExecuteNonQuery();
+
+                Conn.Close();
+            }
+        }
+
+        public void DeleteBook(int ID)
+        {
+            using (SqlConnection Conn = new SqlConnection(GetConnectionString()))
+            {
+                Conn.Open();
+
+                SqlDataAdapter Adaptor = new SqlDataAdapter();
+
+                string CommandText = "DELETE dbo.Books WHERE ID = @ID";
+
+                Adaptor.DeleteCommand = new SqlCommand(CommandText, Conn);
+                Adaptor.DeleteCommand.CommandType = CommandType.Text;
+
+                Adaptor.DeleteCommand.Parameters.Clear();
+
+                Adaptor.DeleteCommand.Parameters.Add("@ID", SqlDbType.Int);
+                Adaptor.DeleteCommand.Parameters["@ID"].Value = ID;
+
+                Adaptor.DeleteCommand.ExecuteNonQuery();
+
+                Conn.Close();
+            }
+        }
+
     }
 
 }
