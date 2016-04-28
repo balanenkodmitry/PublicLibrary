@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
 using PublicLibrary.Domain;
 using PublicLibrary.Web.Models;
 
@@ -16,9 +17,49 @@ namespace PublicLibrary.Web.Controllers
         private PublicLibraryWebContext db = new PublicLibraryWebContext();
 
         // GET: Books
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            return View(db.Books.ToList());
+
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.BookAvailabilitySortParm = sortOrder == "bookAvailability" ? "bookAvailability_desc" : "bookAvailability";
+
+            if (searchString != null)
+                page = 1;
+            else
+                searchString = currentFilter;
+
+
+            ViewBag.CurrentFilter = searchString;
+
+
+            var books = db.Books.Select(b=>b);
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(s => s.Name.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    books = books.OrderByDescending(s => s.Name);
+                    break;
+                case "bookAvailability":
+                    books = books.OrderBy(s => s.BookAvailability);
+                    break;
+                case "bookAvailability_desc":
+                    books = books.OrderByDescending(s => s.BookAvailability);
+                    break;
+                default:
+                    books = books.OrderBy(s => s.Name);
+                    break;
+            }
+
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(books.ToPagedList(pageNumber, pageSize));
+
         }
 
         // GET: Books/Details/5
@@ -43,11 +84,11 @@ namespace PublicLibrary.Web.Controllers
         }
 
         // POST: Books/Create
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Name")] Book book)
+        public ActionResult Create([Bind(Include = "ID,Name,BookAvailability")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -75,11 +116,11 @@ namespace PublicLibrary.Web.Controllers
         }
 
         // POST: Books/Edit/5
-        // Чтобы защититься от атак чрезмерной передачи данных, включите определенные свойства, для которых следует установить привязку. Дополнительные 
-        // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name")] Book book)
+        public ActionResult Edit([Bind(Include = "ID,Name,BookAvailability")] Book book)
         {
             if (ModelState.IsValid)
             {

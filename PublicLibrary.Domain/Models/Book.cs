@@ -12,12 +12,12 @@ namespace PublicLibrary.Domain
         public string Name { get; set; }
         public int ID { get; set; }
         public Availability BookAvailability { get; set; }
-        public int? WhosTaken_User { get; set; }
+        public User WhosTakenUser { get; set; }
 
         public enum Availability
         {
-            Missing = 0,
-            Available = 1,
+            Available = 0,
+            Missing = 1,
             Unavailable = 2
         }
 
