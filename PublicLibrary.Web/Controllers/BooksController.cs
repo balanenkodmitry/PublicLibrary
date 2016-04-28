@@ -9,7 +9,6 @@ using System.Web.Mvc;
 using PagedList;
 using PublicLibrary.Domain;
 using PublicLibrary.Web.Models;
-using PublicLibrary.Web.Models.Books;
 
 namespace PublicLibrary.Web.Controllers
 {
@@ -56,12 +55,6 @@ namespace PublicLibrary.Web.Controllers
                     books = books.OrderBy(s => s.Name);
                     break;
             }
-
-
-            //IEnumerable<Book> booksPerPages = books.Skip((page - 1) * pageSize).Take(pageSize).ToList();
-            //PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = db.Books.Count() };
-            //BooksViewModel ivm = new BooksViewModel { PageInfo = pageInfo, Books = booksPerPages };
-
 
             int pageSize = 3;
             int pageNumber = (page ?? 1);
