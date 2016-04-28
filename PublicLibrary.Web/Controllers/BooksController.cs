@@ -14,11 +14,13 @@ namespace PublicLibrary.Web.Controllers
     public class BooksController : Controller
     {
         private PublicLibraryWebContext db = new PublicLibraryWebContext();
+        private BookRepository db1 = new BookRepository();
 
         // GET: Books
         public ActionResult Index()
         {
-            return View(db.Books.ToList());
+            //return View(db.Books.ToList());
+            return View(db1.FillBookList());
         }
 
         // GET: Books/Details/5
@@ -28,7 +30,7 @@ namespace PublicLibrary.Web.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Book book = db.Books.Find(id);
+            Book book = db1.GetBook(id.GetValueOrDefault());//db.Books.Find(id);
             if (book == null)
             {
                 return HttpNotFound();
@@ -47,7 +49,7 @@ namespace PublicLibrary.Web.Controllers
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Name")] Book book)
+        public ActionResult Create([Bind(Include = "ID,Name,BookAvailability,WhosTaken_User")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -79,7 +81,7 @@ namespace PublicLibrary.Web.Controllers
         // сведения см. в статье http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name")] Book book)
+        public ActionResult Edit([Bind(Include = "ID,Name,BookAvailability,WhosTaken_User")] Book book)
         {
             if (ModelState.IsValid)
             {

@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<PublicLibrary.Domain.Book>
 
 @{
-    ViewBag.Title = "Books";
+    ViewBag.Title = "Index";
 }
 
-<h2>Books</h2>
+<h2>Index</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -14,6 +14,12 @@
         <th>
             @Html.DisplayNameFor(model => model.Name)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BookAvailability)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.WhosTaken_User)
+        </th>
         <th></th>
     </tr>
 
@@ -21,6 +27,12 @@
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BookAvailability)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.WhosTaken_User)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |

@@ -8,7 +8,7 @@ using System.Data.SqlClient;
 
 namespace PublicLibrary.Domain
 {
-    class UserRepository
+    public class UserRepository
     {
         public static string GetConnectionString()
         {
