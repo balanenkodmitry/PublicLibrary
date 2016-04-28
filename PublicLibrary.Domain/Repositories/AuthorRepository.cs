@@ -8,16 +8,16 @@ using System.Data.SqlClient;
 
 namespace PublicLibrary.Domain
 {
-   public class AuthorRepository
+    class AuthorRepository
     {
-        public string GetConnectionString()
+        public static string GetConnectionString()
         {
             const string ConnString = "Server=192.168.10.220;Database=_TEST_ASP_NET_Test;Uid=sa;Pwd=Undergr0und;";
 
             return ConnString;
         }
 
-        public void AddAuthor(Author Author)
+        public static void AddAuthor(Author Author)
         {
             bool Exist = false;
 
@@ -86,7 +86,7 @@ namespace PublicLibrary.Domain
             }
         }
 
-        public  bool IfExistAuthor(Author Author)
+        public static bool IfExistAuthor(Author Author)
         {
             using (SqlConnection Conn = new SqlConnection(GetConnectionString()))
             {
@@ -128,7 +128,7 @@ namespace PublicLibrary.Domain
             return false;
         }
 
-        public Author GetAuthor(int ID)
+        public static Author GetAuthor(int ID)
         {
             using (SqlConnection Conn = new SqlConnection(GetConnectionString()))
             {
@@ -171,7 +171,7 @@ namespace PublicLibrary.Domain
             return null;
         }
 
-        public Author GetAuthor(string FirstName, string LastName)
+        public static Author GetAuthor(string FirstName, string LastName)
         {
             using (SqlConnection Conn = new SqlConnection(GetConnectionString()))
             {

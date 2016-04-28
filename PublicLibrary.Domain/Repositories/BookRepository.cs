@@ -423,43 +423,6 @@ namespace PublicLibrary.Domain
 
             return false;
         }
-
-        public List<Book> FillBookList()
-        {
-            using (SqlConnection Conn = new SqlConnection(GetConnectionString()))
-            {
-                SqlDataAdapter Adaptor = new SqlDataAdapter();
-
-                DataSet ds = new DataSet();
-
-                string CommandText = "select * from dbo.Books";
-
-                Adaptor.SelectCommand = new SqlCommand(CommandText, Conn);
-
-                Adaptor.SelectCommand.Parameters.Clear();
-                                
-                Adaptor.Fill(ds);
-
-                var empList = ds.Tables[0].AsEnumerable()
-                    .Select(dataRow => new Book
-                    {
-                        Name = dataRow.Field<string>("Name"),
-                        BookAvailability = (Book.Availability)dataRow.Field<int>("Available"),
-                        ID = dataRow.Field<int>("ID"),
-                        Autors = GetBookAuthors(dataRow.Field<int>("ID"))
-                    })
-                    .ToList();
-
-                if (empList.Count > 0)
-                {
-                    return empList;
-                }
-
-                Conn.Close();
-            }
-
-            return null;
-        }
     }
 
 }

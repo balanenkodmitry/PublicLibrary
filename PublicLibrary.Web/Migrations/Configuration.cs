@@ -10,6 +10,7 @@ namespace PublicLibrary.Web.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
+            ContextKey = "PublicLibrary.Web.Models.PublicLibraryWebContext";
         }
 
         protected override void Seed(PublicLibrary.Web.Models.PublicLibraryWebContext context)
